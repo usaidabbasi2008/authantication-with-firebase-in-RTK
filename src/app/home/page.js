@@ -14,21 +14,19 @@ export default function HomePage() {
   const dispatch = useDispatch();
   const router = useRouter();
   const { user, ready } = useSelector((s) => s.auth);
-  const [now, setNow] = useState(new Date());
-
+const [now, setNow] = useState(null);
   // login nahi hai to wapas login page par
   useEffect(() => {
     if (ready && !user) router.replace("/");
   }, [ready, user, router]);
 
   // live clock
-  useEffect(() => {
-    const t = setInterval(() => setNow(new Date()), 1000);
-    return () => clearInterval(t);
-  }, []);
-
-  if (!ready || !user) return null;
-
+useEffect(() => {
+  setNow(new Date());
+  const t = setInterval(() => setNow(new Date()), 1000);
+  return () => clearInterval(t);
+}, []);
+if (!ready || !user || !now) return null;
   const hour = now.getHours();
   const greeting =
     hour < 12 ? "Good Morning" : hour < 17 ? "Good Afternoon" : "Good Evening";
